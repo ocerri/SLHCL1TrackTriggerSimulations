@@ -675,26 +675,26 @@ def drawer_project(tree, histos, options):
 
 
         # ______________________________________________________________________
-        tracks = {}  
+        tracks = {}
         for itrack in xrange(ntracks_all):
             patternRef = evt.AMTTTracks_patternRef[itrack]
             if not (patternRef < options.npatterns):
                 continue
- 
+
             chi2     = evt.AMTTTracks_chi2[itrack]
             ndof     = evt.AMTTTracks_ndof[itrack]
             chi2Red  = chi2/ndof
- 
+
             if not (chi2Red < options.maxChi2):
                 continue
- 
+
             invPt      = evt.AMTTTracks_invPt     [itrack]
             cottheta   = evt.AMTTTracks_cottheta  [itrack]
             phi0       = evt.AMTTTracks_phi0      [itrack]
             z0         = evt.AMTTTracks_z0        [itrack]
- 
+
             tracks[itrack] = (1.0/abs(invPt), math.asinh(cottheta), phi0, z0) #pt, eta, phi0, z0
- 
+
         # Sanity check. Double loop over simtracks and fitted tracks
         # For every simTrack look for the closest fitted track (in normalized track pars square diff)
         for ipart, part in trkparts.iteritems():
@@ -705,7 +705,7 @@ def drawer_project(tree, histos, options):
                 match += squaredNormDiff(math.sinh(part[1]), math.sinh(track[1]), parrmses[1]) #CotTheta
                 for i in xrange(2,4):
                     match += squaredNormDiff(part[i], track[i], parrmses[i]) #phi0 , z0
- 
+
                 if minMatch > match:
                     minMatch = match
                     minMatch_i = itrack
@@ -836,34 +836,34 @@ def drawer_draw(histos, options):
         h.additional = []
         if h.ClassName() == "TEfficiency":
             ymax = 1.2
- 
+
             h1 = h.GetCopyTotalHisto(); h1.SetName(h1.GetName()+"_frame"); h1.Reset()
             h1.SetMinimum(0); h1.SetMaximum(ymax)
             h1.SetStats(0); h1.Draw()
- 
+
             # Reference lines for 0.9, 0.95 and 1.0
             xmin, xmax = h1.GetXaxis().GetXmin(), h1.GetXaxis().GetXmax()
             for y in [0.5, 0.8, 0.9, 0.95, 1.0]:
                 tline.DrawLine(xmin, y, xmax, y)
- 
+
             h.gr = h.CreateGraph()
             h.gr.Draw("p")
- 
+
             h.additional += [h.GetCopyPassedHisto(), h.GetCopyTotalHisto()]
 
 #         if hname.find("errpar")>=0:
 # #             ymax = h.GetMaximum() * 1.4
 # #             h.SetMinimum(0); h.SetMaximum(ymax)
-#  
+#
 # #             h.Draw("hist")
 # # #             displayGaus(h, ignorebins=10)
 # #             h.SetMarkerStyle(20); h.SetMarkerSize(0.3)
 # #             CMS_label()
 # #             save(options.outdir, "%s_%s" % (hname, options.ss), dot_pdf=False, dot_root=False)
-# 
+#
 #             # Slicing the TH2D and getting the RMS of each bin as resolution.
 #             # Fill arrays with the RMSs and plot them as TGraph
-#             nBinsX = h.GetNbinsX() 
+#             nBinsX = h.GetNbinsX()
 #             vX=[]
 #             vRMSs=[]
 #             for iBin in range(nBinsX):
@@ -877,7 +877,7 @@ def drawer_draw(histos, options):
 #             gr.GetXaxis().SetTitle(parnames[ivar])
 #             CMS_label()
 #             save(options.outdir, "%s_%s" % ("trackPtRelativeRMSvs"+varnames[ivar], options.ss), dot_pdf=False, dot_root=False)
-           
+
         if (h.ClassName() == "TH1F" or h.ClassName() == "TH2F"):
             continue
 
