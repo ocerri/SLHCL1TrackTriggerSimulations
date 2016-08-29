@@ -8,21 +8,21 @@ from drawer_perf_mu_factEff import main as main_muReso
 # ______________________________________________________________________________
 # Main function
 def main(options):
-    
+
     #
     # Choose the base directory where all the samples are stored
-    #    
+    #
 #     inDir = "/data/rossin/EOS/"
     inDir = "/eos/uscms/store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/test1/" # cmslpc
-    
+
     options.infile = ""
     options.npatterns = 1862700 # this is to obtain 95% coverge on TT27 and sf1_nz4
-    
+
     ###########################################################################################
-    # task 1 calculates analytic efficiencies. You need extended ntuples (with extra branches) to run this option. 
+    # task 1 calculates analytic efficiencies. You need extended ntuples (with extra branches) to run this option.
     # calls the macro drawer_perf_mu_resolution.py
     #
-    if (options.task==1): 
+    if (options.task==1):
         if (options.pu==0): options.infile = inDir+"SingleMuonTest_tt27_PU0_20150815_fullNtuple/results_LTF_SingleMuonTest_tt27_PU0_sf1_nz4_pt3_5oo6_95c_100k.root"
         else: raise Exception("Analytic efficiencies can be calculated only on singleMuon samples with no PU")
 
@@ -37,7 +37,7 @@ def main(options):
     elif (options.task==2):
         if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
 #         if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks.root"
-        elif (options.pu==1): 
+        elif (options.pu==1):
             options.infile = inDir+"SingleMuonTest_PU140_tt27_sf1_nz4_pt3_ml5_20150511/results_LTF_SingleMuonTest_PU140_tt27_sf1_nz4_pt3_5oo6_95c_20150511.root"
             options.pu=0 # this will process only the first track in the event, i.e. the muon
         elif (options.pu==140): options.infile = inDir+"Neutrino_PU140_tt27_sf1_nz4_pt3_20151107/tracks_LTF_Neutrino_PU140_tt27_sf1_nz4_pt3_5oo6_95c_14k.root"
@@ -52,7 +52,7 @@ def main(options):
         elif (options.pu==140): options.infile = inDir+"Neutrino_PU140_tt27_sf1_nz4_pt3_20151107/tracks_LTF_Neutrino_PU140_tt27_sf1_nz4_pt3_5oo6_95c_14k.root"
         elif (options.pu==200): options.infile = inDir+"Neutrino_PU200_tt27_sf1_nz4_pt3_20151029/tracks_LTF_Neutrino_PU200_tt27_sf1_nz4_pt3_5oo6_95c.root"
         else                  : raise ValueError("PU option not valid.")
-     
+
      # Make input file list
     if not options.infile.endswith(".root") and not options.infile.endswith(".txt"):
         raise ValueError("infile must be .root file or .txt file")
@@ -68,7 +68,7 @@ def main(options):
 
     # Batch mode. In interactive mode the canvases saved in png are not updated
     gROOT.SetBatch(True)
-    
+
     # prepare an outString for output labelling
     inName = options.infile
     fileName = inName.split("/")[-1]
@@ -84,7 +84,7 @@ def main(options):
                 puString = puString + str(puFromFileName)
             else:
                 puString = puString + str(puFromFileName) + "SingleTrack"
-    
+
     stringPt = "{:.0f}".format(options.minPt)
     outString = outString + "_" + puString + "_" +options.ss + "_pt" + stringPt +"_"
     options.outstring = outString
@@ -92,12 +92,12 @@ def main(options):
     # Init
     tchain = TChain("ntupler/tree", "")
     tchain.AddFileInfoList(options.tfilecoll.GetList())
-    
-    
+
+
     if (tchain.GetEntries()==0):
         print "Cannot open file %s or file empty." % options.infile
         return
-    
+
     has_pixelDigis = 0
     has_mixedSimHits = 0
     if (options.task==1):

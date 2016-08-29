@@ -1,5 +1,5 @@
 #include "SLHCL1TrackTriggerSimulations/AMSimulation/interface/StubCleaner.h"
-#include "TrackParametersToTT.cc"
+#include "TrackParametersToTT.h"
 #include "SLHCL1TrackTriggerSimulations/AMSimulationIO/interface/TTStubReader.h"
 
 static const unsigned MIN_NGOODSTUBS = 3;
@@ -101,8 +101,8 @@ int StubCleaner::cleanStubs(TString src, TString out) {
         float vz     = reader.vp_vz    ->front();
         int   charge = reader.vp_charge->front();
 
-        Int_t aux_TT = TrackParametersToTT(phi, charge/pt , eta, vz);
-        if (aux_TT !=25) continue;
+        int aux_TT = OCTrackParametersToTT(phi, charge/pt , eta, vz);
+        if (aux_TT != (int)po_.tower) continue;
 
         const unsigned nstubs = reader.vb_modId->size();
         if (verbose_>1 && ievt%50000==0)  std::cout << Debug() << Form("... Processing event: %7lld, keeping: %7ld", ievt, nKept) << std::endl;

@@ -207,7 +207,7 @@ def drawer_project(tree, histos, options):
 
             synTpId  = evt.AMTTTracks_synTpId[itrack]
             if synTpId == 1:
-                trigger = True	   
+                trigger = True
 
             patternRef = evt.AMTTTracks_patternRef[itrack]
             if not (patternRef < options.npatterns):
@@ -224,7 +224,7 @@ def drawer_project(tree, histos, options):
             track_eta  = evt.AMTTTracks_eta     [itrack]
 
             if trigger:
-                tpId = evt.AMTTTracks_tpId[itrack]	        
+                tpId = evt.AMTTTracks_tpId[itrack]
                 trkparts_trigger[tpId] = True
                 trkparts_trigger_vars[tpId] = (track_pt, track_eta)
 
