@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
         ("nDCBits"      , po::value<unsigned>(&option.nDCBits)->default_value(0), "Specify # of DC bits")
 
         // Trigger tower selection
-        ("tower,t"      , po::value<unsigned>(&option.tower)->default_value(27), "Specify the trigger tower")
+        ("tower,t"      , po::value<unsigned>(&option.tower)->default_value(25), "Specify the trigger tower")
 
         // Superstrip definition
         ("superstrip,s" , po::value<std::string>(&option.superstrip)->default_value("ss256_nz2"), "Specify the superstrip definition (default: ss256_nz2)")
