@@ -136,4 +136,3 @@ def save(imgdir, imgname, redraw_axis=True, dot_pdf=True, dot_root=False, dot_c=
         tfile.Close()
     if dot_c:
         gPad.Print(imgdir+imgname+".C")
-

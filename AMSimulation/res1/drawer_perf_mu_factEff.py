@@ -303,7 +303,7 @@ def drawer_project(tree, histos, options):
                 if tpId in trkparts and tpId in trkparts_simhits and fraction > options.minDigiFraction:
                     if simHitRef in trkparts_simhits[tpId]:
                         temp_tpIds.append(tpId)
-#                         histos["digiFraction"].Fill(fraction)
+#                         #histos["digiFraction"].Fill(fraction)
             tpIds = temp_tpIds
             if not tpIds:
                 continue

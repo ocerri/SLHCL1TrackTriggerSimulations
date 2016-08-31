@@ -8,7 +8,7 @@ from ROOT import TFileCollection, gROOT, gSystem
 def add_drawer_arguments(parser):
     outdir = (parser.prog.replace("drawer_", "figures_"))[:-3]
     parser.add_argument("infile", help="input file (either .root file or .txt file listing .root files)")
-    parser.add_argument("--tower", type=int, default=27, help="trigger tower (default: %(default)s)")
+    parser.add_argument("--tower", type=int, default=25, help="trigger tower (default: %(default)s)")
     parser.add_argument("--pu", type=int, default=0, help="number of pileup interactions (default: %(default)s)")
     parser.add_argument("--signal", action="store_true", help="select signal process (default: %(default)s)")
     parser.add_argument("--outdir", default=outdir, help="output directory (default: %(default)s)")
@@ -56,4 +56,3 @@ def parse_drawer_options(options):
             options.phimax = -2*pi -pi/2 + (2*pi/8) * (iphi+1)
         options.ptmin = 2.
         options.ptmax = 2000.
-
