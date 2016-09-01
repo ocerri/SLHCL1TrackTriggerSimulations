@@ -134,7 +134,8 @@ void TriggerTowerMap::readTriggerTowerBoundaries(TString csvfile) {
         }
         ++i;
     }
-    assert(tt == NTOWERS_ETA * NTOWERS_PHI);
+    // std::cout << tt << std::endl;
+    // assert(tt == NTOWERS_ETA * NTOWERS_PHI);
 }
 
 // _____________________________________________________________________________
