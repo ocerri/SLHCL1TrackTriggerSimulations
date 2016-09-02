@@ -219,6 +219,8 @@ def drawer_draw(histos, options):
 
         for iq, q in enumerate(in_quantiles):
             ps.AddText("%4.1f%% CI = %6.4g" % ((q*100), quantiles[iq]))
+            if h.GetName()=="nroads_per_event":
+                print "SpecialOut: ", h.GetName(), " %4.1f%% CI = %6.4g" % ((q*100), quantiles[iq])
         h.stats = [h.GetMean()] + quantiles.tolist()
 
         h.SetStats(0)
@@ -399,6 +401,9 @@ def main():
     drawer_draw(histos, options)
     drawer_draw2(histos, options)
     drawer_sitrep(histos, options)
+
+    print "Roads stats:"
+    print "Mean: ", histos["nroads_per_event"].GetMean()
 
 
 # ______________________________________________________________________________

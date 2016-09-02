@@ -13,10 +13,10 @@ def main(options):
     # Choose the base directory where all the samples are stored
     #
 #     inDir = "/data/rossin/EOS/"
-    inDir = "/eos/uscms/store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/test1/" # cmslpc
+    inDir = "/eos/uscms/store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/" # cmslpc
 
     options.infile = ""
-    options.npatterns = 1862700 # this is to obtain 95% coverge on TT27 and sf1_nz4
+    # options.npatterns = 1594200 # this is to obtain 95% coverge on TT27 and sf1_nz4
 
     ###########################################################################################
     # task 1 calculates analytic efficiencies. You need extended ntuples (with extra branches) to run this option.
@@ -36,7 +36,7 @@ def main(options):
     #
     elif (options.task==2):
         if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
-#         if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks.root"
+        # if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks.root"
         elif (options.pu==1):
             options.infile = inDir+"SingleMuonTest_PU140_tt27_sf1_nz4_pt3_ml5_20150511/results_LTF_SingleMuonTest_PU140_tt27_sf1_nz4_pt3_5oo6_95c_20150511.root"
             options.pu=0 # this will process only the first track in the event, i.e. the muon
@@ -48,9 +48,9 @@ def main(options):
     # task 3. calculates # of roads and combinations
     #
     elif (options.task==3):
-        if   (options.pu==0  ): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
-        elif (options.pu==140): options.infile = inDir+"Neutrino_PU140_tt27_sf1_nz4_pt3_20151107/tracks_LTF_Neutrino_PU140_tt27_sf1_nz4_pt3_5oo6_95c_14k.root"
-        elif (options.pu==200): options.infile = inDir+"Neutrino_PU200_tt27_sf1_nz4_pt3_20151029/tracks_LTF_Neutrino_PU200_tt27_sf1_nz4_pt3_5oo6_95c.root"
+        if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
+        elif (options.pu==140): options.infile = inDir + "tracks_" + options.EventType + "PU140_" + options.ss + ".root"
+        elif (options.pu==200): options.infile = inDir + "tracks_" + options.EventType + "PU140_" + options.ss + ".root"
         else                  : raise ValueError("PU option not valid.")
 
      # Make input file list
@@ -130,13 +130,14 @@ if __name__ == '__main__':
 #     add_drawer_arguments(parser)
 
     # Add more arguments
-    parser.add_argument("task", type=int, help="FOM to produce: analyticEff=1. syntheticEff=2. #combinations=3")
+    parser.add_argument("--task", type=int, default=3, help="FOM to produce: analyticEff=1. syntheticEff=2. #combinations=3")
     parser.add_argument("-n", "--nentries", type=int, default=50000, help="number of entries (default: %(default)s)")
-    parser.add_argument("--pu", type=int, default=0, help="number of pileup interactions to be processed (PU=1 will process one track/event in a mu+PU sample) (default: %(default)s)")
-    parser.add_argument("--outdir", type=str, default="test", help="output directory (default: %(default)s)")
-    parser.add_argument("--ss", type=str, default="sf1_nz4", help="short name of superstrip definition (default: %(default)s)")
+    parser.add_argument("--pu", type=int, default=140, help="number of pileup interactions to be processed (PU=1 will process one track/event in a mu+PU sample) (default: %(default)s)")
+    parser.add_argument("--outdir", type=str, default="~/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/AM_analysis_output/", help="output directory (default: %(default)s)")
+    parser.add_argument("--ss", type=str, default="sf1_nz4_L5x2", help="short name of superstrip definition (default: %(default)s)")
+    parser.add_argument("--EventType", type=str, default="TTbar_", help="short name of event type (default: %(default)s)")
 #     parser.add_argument("--signal", action="store_true", help="select signal process (default: %(default)s)")
-#     parser.add_argument("npatterns", type=int, help="number of patterns to reach the desired coverage")
+    parser.add_argument("--npatterns", type=int, default=1594200 ,help="number of patterns to reach the desired coverage")
 #     parser.add_argument("--coverage", type=float, default=0.95, help="desired coverage (default: %(default)s)")
     parser.add_argument("--minPt", type=float, default=3, help="min pT for gen particle (default: %(default)s)")
 #     parser.add_argument("--maxChi2", type=float, default=5, help="max reduced chi-squared (default: %(default)s)")
