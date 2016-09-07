@@ -117,4 +117,3 @@ with open("../data/trigger_sector_boundaries.csv", "r") as f:
         mymap[key] = values
 
 json.dump(mymap, open("../data/trigger_sector_boundaries.json", "w"), sort_keys=True)
-

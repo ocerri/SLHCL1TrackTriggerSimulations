@@ -31,4 +31,3 @@ assert(len(mymap) == 6*8)
 #    print "Module", k, "is in", len(reversemap[k]), "towers."
 
 json.dump(mymap, open("../data/trigger_sector_map.json", "w"), sort_keys=True)
-
