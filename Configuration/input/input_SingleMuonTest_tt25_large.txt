@@ -1,0 +1,2 @@
+/uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/SingleMuonTest_tt25_PU0_7000_ntuple.root
+/uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/SingleMuonTest_tt25_PU0_ntuple_100k.root

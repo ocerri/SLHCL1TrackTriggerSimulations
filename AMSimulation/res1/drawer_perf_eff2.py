@@ -10,11 +10,6 @@ fcol = TColor.GetColor("#E58080")
 col_res = TColor.GetColor("#008000")
 
 #________ Tklayout cuts ________
-r_star = 58.9
-mPtFactor = 0.3*3.8*0.5*0.01
-
-def phi_star(phi_0, qbpT):
-    return phi_0 - TMath.ASin(mPtFactor*r_star*qbpT)
 
 
 # ______________________________________________________________________________
@@ -44,16 +39,22 @@ def drawer_book(options):
     histos[hname] = TEfficiency(hname, "; p_{T} [GeV]; %s" % ytitle, 100, 0., 10.)
 
     hname = prefix + "eta"
-    histos[hname] = TEfficiency(hname, "; #eta; %s" % ytitle,        100, 0., 0.73)
+    histos[hname] = TEfficiency(hname, "; #eta; %s" % ytitle,        140, -0.4, 1)
+
+    hname = prefix + "eta_star"
+    histos[hname] = TEfficiency(hname, "; #eta*; %s" % ytitle,        140, -0.4, 1)
 
     hname = prefix + "phi"
-    histos[hname] = TEfficiency(hname, "; #phi; %s" % ytitle,        100, 3.14/4., 3.14/2.)
+    histos[hname] = TEfficiency(hname, "; #phi; %s" % ytitle,        180, 0.2, 2.)
+
+    hname = prefix + "phi_star"
+    histos[hname] = TEfficiency(hname, "; #phi*; %s" % ytitle,        180, 0.2, 2.)
 
     hname = prefix + "vz"
     histos[hname] = TEfficiency(hname, "; v_{z} [cm]; %s" % ytitle,  120, -30, 30)
 
-#     hname = prefix + "charge"
-#     histos[hname] = TEfficiency(hname, "; charge; %s" % ytitle,      5, -2.5, 2.5)
+    #hname = prefix + "charge"
+    #histos[hname] = TEfficiency(hname, "; charge; %s" % ytitle,      5, -2.5, 2.5)
 
     prefix = "resolution_"
     xtitle = "p_{T} resolution / p_{T}"
@@ -144,10 +145,12 @@ def drawer_project(tree, histos, options):
     # Loop over events
     numEntries, denomEntries = 0, 0
 
+    # options.verbose=1 #DEBUG line
+
     for ievt, evt in enumerate(tree):
         if (ievt == options.nentries):  break
 
-        if   (ievt % 1000 == 0               ):  print "Processing event: %i" % ievt
+        if   (ievt % 10000 == 0               ):  print "Processing event: %i" % ievt
         elif (ievt %  100 == 0 and options.pu):  print "Processing event: %i" % ievt
 
         nparts_all = evt.trkParts_primary.size()
@@ -176,11 +179,17 @@ def drawer_project(tree, histos, options):
             vz      = evt.trkParts_vz     [ipart]
             pdgId   = evt.trkParts_pdgId  [ipart]
 
-            if OCTrackParametersToTT(phi, charge/pt , eta, vz) != options.tower:
-                continue
+            aux_TT = OCTrackParametersToTT(phi, charge/pt , eta, vz)
+            if options.verbose:
+                print "DEBUG: aux_TT= ",aux_TT , "  ievt=", ievt
+                print "DEBUG: Track parameters: ",pt, eta, phi, vz, charge, pdgId
+            # if aux_TT != options.tower:
+            #     continue
 
             #____ Including pT cut from option ____
-            if pt < options.ptmin:
+            # if pt < options.ptmin:
+            #     continue
+            if not trigger_efficiency_denominator(phi, charge/pt , eta, vz, options.tower, options.blind_variable):
                 continue
 
             trkparts[ipart] = (pt, eta, phi, vz, charge, pdgId)
@@ -224,44 +233,52 @@ def drawer_project(tree, histos, options):
 
         # ______________________________________________________________________
         # N-1 conditions
-
+        if options.verbose: print "DEBUG: ievt=",ievt
         for k, v in trkparts.iteritems():
             pt, eta, phi, vz, charge, pdgId = v
             trigger = k in trkparts_trigger
 
             prefix = "efficiency_"
-            if options.etamin < eta < options.etamax and options.phimin < phi < options.phimax:
-                histos[prefix + "pt"      ].Fill(trigger, pt)
-                histos[prefix + "ppt"     ].Fill(trigger, pt)
-                histos[prefix + "pppt"    ].Fill(trigger, pt)
-                denomEntries += 1
-                if trigger:  numEntries += 1
-            if options.ptmin < pt < options.ptmax and options.phimin < phi < options.phimax:
-                histos[prefix + "eta"     ].Fill(trigger, eta)
-            if options.ptmin < pt < options.ptmax and options.etamin < eta < options.etamax:
-                histos[prefix + "phi"     ].Fill(trigger, phi)
-            if options.ptmin < pt < options.ptmax and options.etamin < eta < options.etamax and options.phimin < phi < options.phimax:
-                histos[prefix + "vz"      ].Fill(trigger, vz)
-#                 histos[prefix + "charge"  ].Fill(trigger, charge)
+            # if options.etamin < eta < options.etamax and options.phimin < phi < options.phimax:
+            histos[prefix + "pt"      ].Fill(trigger, pt)
+            histos[prefix + "ppt"     ].Fill(trigger, pt)
+            histos[prefix + "pppt"    ].Fill(trigger, pt)
+            if options.verbose: print "DEBUG: trigger=", trigger, " pt=",pt
+            denomEntries += 1
+            if trigger:  numEntries += 1
+            # if options.ptmin < pt < options.ptmax and options.phimin < phi < options.phimax:
+            histos[prefix + "eta"     ].Fill(trigger, eta)
+
+            eta_star = OCEtaToEta_star(eta, vz, charge/pt)
+            histos[prefix + "eta_star"     ].Fill(trigger, eta_star)
+            # if options.ptmin < pt < options.ptmax and options.etamin < eta < options.etamax:
+            histos[prefix + "phi"     ].Fill(trigger, phi)
+
+            phi_star = OCPhiToPhi_star(phi, charge/pt)
+            histos[prefix + "phi_star"     ].Fill(trigger, phi_star)
+
+            # if options.ptmin < pt < options.ptmax and options.etamin < eta < options.etamax and options.phimin < phi < options.phimax:
+            histos[prefix + "vz"      ].Fill(trigger, vz)
+                # histos[prefix + "charge"  ].Fill(trigger, charge)
 
             if trigger:
                 track_pt, track_eta = trkparts_trigger_vars[k]
 
                 prefix = "resolution_"
-                if options.etamin < eta < options.etamax and options.phimin < phi < options.phimax:
-                    ptres = (track_pt - pt) / pt
-                    if 15 < pt < 100:
-                        histos[prefix + "pt"      ].Fill(ptres)
-                    if 5 < pt < 15:
-                        histos[prefix + "ppt"     ].Fill(ptres)
-                    if 3 < pt < 5:
-                        histos[prefix + "pppt"    ].Fill(ptres)
+                # if options.etamin < eta < options.etamax and options.phimin < phi < options.phimax:
+                ptres = (track_pt - pt) / pt
+                if 15 < pt < 100:
+                    histos[prefix + "pt"      ].Fill(ptres)
+                if 5 < pt < 15:
+                    histos[prefix + "ppt"     ].Fill(ptres)
+                if 3 < pt < 5:
+                    histos[prefix + "pppt"    ].Fill(ptres)
 
-                    histos[prefix + "pt_vs_pt"].Fill(charge*pt, ptres)
+                histos[prefix + "pt_vs_pt"].Fill(charge*pt, ptres)
 
-                if options.ptmin < pt < options.ptmax and options.phimin < phi < options.phimax:
-                    ptres = (track_pt - pt) / pt
-                    histos[prefix + "pt_vs_eta"].Fill(eta, ptres)
+                # if options.ptmin < pt < options.ptmax and options.phimin < phi < options.phimax:
+                ptres = (track_pt - pt) / pt
+                histos[prefix + "pt_vs_eta"].Fill(eta, ptres)
 
 
     prefix = "efficiency_"
@@ -300,73 +317,98 @@ def drawer_draw(histos, options):
 
 
     for hname, h in histos.iteritems():
+        print_trigger = options.blind_variable=="none" or hname.endswith(options.blind_variable.lower())
+        print_trigger += options.blind_variable.startswith("eta") and hname.endswith("eta")
+        print_trigger += options.blind_variable.startswith("phi") and hname.endswith("phi")
 
-        h.additional = []
-        if h.ClassName() == "TEfficiency":
-            ymax = 1.2
+        if print_trigger:
+            print "print_trigger:", hname
+            h.additional = []
+            if h.ClassName() == "TEfficiency":
+                ymax = 1.2
 
-            h1 = h.GetCopyTotalHisto(); h1.SetName(h1.GetName()+"_frame"); h1.Reset()
-            h1.SetMinimum(0); h1.SetMaximum(ymax)
-            h1.SetStats(0); h1.Draw()
+                h1 = h.GetCopyTotalHisto(); h1.SetName(h1.GetName()+"_frame"); h1.Reset()
+                h1.SetMinimum(0); h1.SetMaximum(ymax)
+                h1.SetStats(0); h1.Draw()
 
-            # Reference lines for 0.9, 0.95 and 1.0
-            xmin, xmax = h1.GetXaxis().GetXmin(), h1.GetXaxis().GetXmax()
-            for y in [0.5, 0.8, 0.9, 0.95, 1.0]:
-                tline.DrawLine(xmin, y, xmax, y)
+                # Reference lines for 0.9, 0.95 and 1.0
+                xmin, xmax = h1.GetXaxis().GetXmin(), h1.GetXaxis().GetXmax()
+                for y in [0.5, 0.8, 0.9, 0.95, 1.0]:
+                    tline.DrawLine(xmin, y, xmax, y)
 
-            h.gr = h.CreateGraph()
-            h.gr.Draw("p")
+                l_bounds = TLine()
+                l_bounds.SetLineColor(4)
+                l_bounds.SetLineWidth(2)
+                l_bounds.SetLineStyle(2)
 
-            h.additional += [h.GetCopyPassedHisto(), h.GetCopyTotalHisto()]
+                if hname.endswith("vz"):
+                    l_bounds.DrawLine(OCvz_max_TTdef,0,OCvz_max_TTdef,1.1)
+                    l_bounds.DrawLine(-OCvz_max_TTdef,0,-OCvz_max_TTdef,1.1)
+                elif hname.endswith("pt"):
+                    l_bounds.DrawLine(1/OCinvPT_max_TTdef, 0, 1/OCinvPT_max_TTdef, 1.1)
+                elif hname.endswith("phi_star"):
+                    xmin,xmax = TTnumberToPhi_starBorder(options.tower)
+                    l_bounds.DrawLine(xmin, 0, xmin, 1.1)
+                    l_bounds.DrawLine(xmax, 0, xmax, 1.1)
+                elif hname.endswith("eta_star"):
+                    xmin,xmax = TTnumberToEta_starBorder(options.tower)
+                    l_bounds.DrawLine(xmin, 0, xmin, 1.1)
+                    l_bounds.DrawLine(xmax, 0, xmax, 1.1)
 
-        elif h.ClassName() == "TH1F":
-            ymax = h.GetMaximum() * 1.4
-            h.SetMinimum(0); h.SetMaximum(ymax)
 
-            h.Draw("hist")
-            displayGaus(h, ignorebins=10)
+                h.gr = h.CreateGraph()
+                h.gr.Draw("p")
 
-        elif h.ClassName() == "TH2F":
-            ymax = 0.05
-            nbinsx = h.GetNbinsX()
-            gr1 = TGraphAsymmErrors(nbinsx)
-            gr1.SetName(hname + "_gr1"); setattr(h, "gr1", gr1)
-            gr1.SetMarkerSize(1); gr1.SetMarkerColor(col_res)
-            gr2 = TGraphAsymmErrors(nbinsx)
-            gr2.SetName(hname + "_gr2"); setattr(h, "gr2", gr2)
-            gr2.SetMarkerSize(1); gr2.SetMarkerColor(col_res)
+                h.additional += [h.GetCopyPassedHisto(), h.GetCopyTotalHisto()]
 
-            for ibin in xrange(nbinsx):
-                hpy = h.ProjectionY(hname + "_py%i" % ibin, ibin+1, ibin+1); setattr(h, "py%i" % ibin, hpy)
-                x = h.GetXaxis().GetBinCenter(ibin+1)
+            elif h.ClassName() == "TH1F":
+                ymax = h.GetMaximum() * 1.4
+                h.SetMinimum(0); h.SetMaximum(ymax)
 
-                if hpy.GetEntries() < 30:
-                    print "WARNING: not enough entries in %s: %i" % (hpy.GetName(), hpy.GetEntries())
-                    gr1.SetPoint(ibin, x, 999999)
-                    gr2.SetPoint(ibin, x, 999999)
-                    continue
+                h.Draw("hist")
+                displayGaus(h, ignorebins=10)
 
-                if hpy.GetEntries() < 100:
-                    print "INFO: rebinning in %s: %i" % (hpy.GetName(), hpy.GetEntries())
-                    hpy.Rebin(2)
+            elif h.ClassName() == "TH2F":
+                ymax = 0.05
+                nbinsx = h.GetNbinsX()
+                gr1 = TGraphAsymmErrors(nbinsx)
+                gr1.SetName(hname + "_gr1"); setattr(h, "gr1", gr1)
+                gr1.SetMarkerSize(1); gr1.SetMarkerColor(col_res)
+                gr2 = TGraphAsymmErrors(nbinsx)
+                gr2.SetName(hname + "_gr2"); setattr(h, "gr2", gr2)
+                gr2.SetMarkerSize(1); gr2.SetMarkerColor(col_res)
 
-                assert(hpy.GetNbinsX() > 20)
-                fitxmin, fitxmax = hpy.GetBinCenter(10+1), hpy.GetBinCenter(hpy.GetNbinsX()-1-10+1)
-                r = hpy.Fit("gaus", "INS", "", fitxmin, fitxmax)
-                p1, e1, p2, e2 = r.Parameter(1), r.ParError(1), r.Parameter(2), r.ParError(2)
-                gr1.SetPoint(ibin, x, p1)
-                gr1.SetPointError(ibin, 0, 0, e1, e1)
-                gr2.SetPoint(ibin, x, p2)
-                gr2.SetPointError(ibin, 0, 0, e2, e2)
+                for ibin in xrange(nbinsx):
+                    hpy = h.ProjectionY(hname + "_py%i" % ibin, ibin+1, ibin+1); setattr(h, "py%i" % ibin, hpy)
+                    x = h.GetXaxis().GetBinCenter(ibin+1)
 
-            hpx2 = h.ProjectionX(hname + "_px2"); hpx2.Reset(); setattr(h, "px2", hpx2)
-            hpx2.SetYTitle("p_{T} resolution/p_{T}")
-            hpx2.SetMinimum(0); hpx2.SetMaximum(ymax)
-            hpx2.SetStats(0); hpx2.Draw()
-            gr2.Draw("p")
+                    if hpy.GetEntries() < 30:
+                        print "WARNING: not enough entries in %s: %i" % (hpy.GetName(), hpy.GetEntries())
+                        gr1.SetPoint(ibin, x, 999999)
+                        gr2.SetPoint(ibin, x, 999999)
+                        continue
 
-        CMS_label()
-        save(options.outdir, "%s_%s" % (hname, options.outstring), dot_root=False, dot_pdf=False, additional=h.additional)
+                    if hpy.GetEntries() < 100:
+                        print "INFO: rebinning in %s: %i" % (hpy.GetName(), hpy.GetEntries())
+                        hpy.Rebin(2)
+
+                    assert(hpy.GetNbinsX() > 20)
+                    fitxmin, fitxmax = hpy.GetBinCenter(10+1), hpy.GetBinCenter(hpy.GetNbinsX()-1-10+1)
+                    r = hpy.Fit("gaus", "INS", "", fitxmin, fitxmax)
+                    p1, e1, p2, e2 = r.Parameter(1), r.ParError(1), r.Parameter(2), r.ParError(2)
+                    gr1.SetPoint(ibin, x, p1)
+                    gr1.SetPointError(ibin, 0, 0, e1, e1)
+                    gr2.SetPoint(ibin, x, p2)
+                    gr2.SetPointError(ibin, 0, 0, e2, e2)
+
+                hpx2 = h.ProjectionX(hname + "_px2"); hpx2.Reset(); setattr(h, "px2", hpx2)
+                hpx2.SetYTitle("p_{T} resolution/p_{T}")
+                hpx2.SetMinimum(0); hpx2.SetMaximum(ymax)
+                hpx2.SetStats(0); hpx2.Draw()
+                gr2.Draw("p")
+
+            CMS_label()
+            save(options.outdir, "%s_%s" % (hname, options.outstring), dot_root=False, dot_pdf=False, additional=h.additional)
     return
 
 
@@ -412,16 +454,18 @@ if __name__ == '__main__':
     parser.add_argument("ss", help="short name of superstrip definition (e.g. ss256)")
     parser.add_argument("npatterns", type=int, help="number of patterns to reach the desired coverage")
     parser.add_argument("--coverage", type=float, default=0.95, help="desired coverage (default: %(default)s)")
-    parser.add_argument("--minPt", type=float, default=3, help="min pT for gen particle (default: %(default)s)")
+    # parser.add_argument("--minPt", type=float, default=0.5, help="min pT for gen particle (default: %(default)s)")
     parser.add_argument("--maxChi2", type=float, default=5, help="max reduced chi-squared (default: %(default)s)")
     parser.add_argument("--low-stat", action="store_true", help="low statistics (default: %(default)s)")
     parser.add_argument("--low-low-stat", action="store_true", help="low low statistics (default: %(default)s)")
     parser.add_argument("--outstring", type=str, help="string for output file labelling (default: %(default)s)")
+    parser.add_argument("--blind_variable", type=str, help="string for output file labelling (default: %(default)s)")
+
 
     # Parse default arguments
     options = parser.parse_args()
     parse_drawer_options(options)
-    options.ptmin = options.minPt
+    # options.ptmin = options.minPt
 
     # Call the main function
     main(options)

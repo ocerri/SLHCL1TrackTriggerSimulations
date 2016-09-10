@@ -13,7 +13,10 @@ def main(options):
     # Choose the base directory where all the samples are stored
     #
 #     inDir = "/data/rossin/EOS/"
-    inDir = "/eos/uscms/store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/" # cmslpc
+    # inDir = "/eos/uscms/store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/" # cmslpc
+    inDir = options.inDir+"/"
+    # inDir="/uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/tt25_test/"
+
 
     options.infile = ""
     # options.npatterns = 1594200 # this is to obtain 95% coverge on TT27 and sf1_nz4
@@ -35,7 +38,11 @@ def main(options):
     # PU = 1.   running on a SingleTrack + PU sample, but considering only the SingleTrack for efficiency caclulation
     #
     elif (options.task==2):
-        if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
+        if   (options.pu==0):
+            options.infile = inDir+"tracks_" + options.EventType + "PU0_" + options.ss
+            if options.m6oo6: options.infile += "_6oo6"
+            options.infile += ".root"
+        # if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
         # if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks.root"
         elif (options.pu==1):
             options.infile = inDir+"SingleMuonTest_PU140_tt27_sf1_nz4_pt3_ml5_20150511/results_LTF_SingleMuonTest_PU140_tt27_sf1_nz4_pt3_5oo6_95c_20150511.root"
@@ -50,7 +57,7 @@ def main(options):
     elif (options.task==3):
         if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
         elif (options.pu==140): options.infile = inDir + "tracks_" + options.EventType + "PU140_" + options.ss + ".root"
-        elif (options.pu==200): options.infile = inDir + "tracks_" + options.EventType + "PU140_" + options.ss + ".root"
+        elif (options.pu==200): options.infile = inDir + "tracks_" + options.EventType + "PU200_" + options.ss + ".root"
         else                  : raise ValueError("PU option not valid.")
 
      # Make input file list
@@ -85,9 +92,15 @@ def main(options):
             else:
                 puString = puString + str(puFromFileName) + "SingleTrack"
 
-    stringPt = "{:.0f}".format(options.minPt)
-    outString = outString + "_" + puString + "_" +options.ss + "_pt" + stringPt +"_"
+    # stringPt = "{:.0f}".format(options.minPt)
+    # outString = outString + "_" + puString + "_" +options.ss + "_pt" + stringPt +"_"
+    stringBlind = ""
+    if options.blind_variable:
+        stringBlind = "_Blind"+options.blind_variable.upper()
+    outString = outString + "_" + puString + "_" +options.ss + stringBlind +"_"
+    if options.m6oo6: outString +="6oo6_"
     options.outstring = outString
+    print "Outstring: " , options.outstring
 
     # Init
     tchain = TChain("ntupler/tree", "")
@@ -112,7 +125,7 @@ def main(options):
         print "Executing: %s" %stringCommand
         subprocess.call(stringCommand, shell=True)
     elif (options.task==2):
-        stringCommand = "python drawer_perf_eff2.py %s %s %d -n %d -b --outdir %s --pu %d --minPt %f --outstring %s" % (options.infile,options.ss,options.npatterns,options.nentries,options.outdir,options.pu,options.minPt,options.outstring)
+        stringCommand = "python drawer_perf_eff2.py %s %s %d -n %d -b --outdir %s --pu %d --outstring %s --blind_variable %s" % (options.infile,options.ss,options.npatterns,options.nentries,options.outdir,options.pu,options.outstring,options.blind_variable)
         print "Executing: %s" %stringCommand
         subprocess.call(stringCommand, shell=True)
     elif (options.task==3):
@@ -134,6 +147,7 @@ if __name__ == '__main__':
     parser.add_argument("-n", "--nentries", type=int, default=50000, help="number of entries (default: %(default)s)")
     parser.add_argument("--pu", type=int, default=140, help="number of pileup interactions to be processed (PU=1 will process one track/event in a mu+PU sample) (default: %(default)s)")
     parser.add_argument("--outdir", type=str, default="~/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/AM_analysis_output/", help="output directory (default: %(default)s)")
+    parser.add_argument("--inDir", type=str, default="root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test", help="output directory (default: %(default)s)")
     parser.add_argument("--ss", type=str, default="sf1_nz4_L5x2", help="short name of superstrip definition (default: %(default)s)")
     parser.add_argument("--EventType", type=str, default="TTbar_", help="short name of event type (default: %(default)s)")
 #     parser.add_argument("--signal", action="store_true", help="select signal process (default: %(default)s)")
@@ -143,11 +157,13 @@ if __name__ == '__main__':
 #     parser.add_argument("--maxChi2", type=float, default=5, help="max reduced chi-squared (default: %(default)s)")
 #     parser.add_argument("--low-stat", action="store_true", help="low statistics (default: %(default)s)")
 #     parser.add_argument("--low-low-stat", action="store_true", help="low low statistics (default: %(default)s)")
+    parser.add_argument("--blind_variable", type=str, default="none", help="variable to be blinded (default: %(default)s)")
+    parser.add_argument("--m6oo6", type=int, default=0, help="6oo6 tracks as input (default: %(default)s)")
 
     # Parse default arguments
     options = parser.parse_args()
 #     parse_drawer_options(options)
-#     options.ptmin = options.minPt
+    options.ptmin = options.minPt
 
     # Call the main function
     main(options)

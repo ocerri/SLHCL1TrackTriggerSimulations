@@ -17,30 +17,32 @@ from array import array
 # ______________________________________________________________________________
 # Init
 class DrawerInit:
-    def __init__(self):
+    def __init__(self, setgStyle=1):
         # ROOT
         gROOT.LoadMacro("tdrstyle.C")
         gROOT.LoadMacro("../interface/HelperMath.h")
         gROOT.LoadMacro("../../AMSimulationIO/src/AMSimulationIOLinkDef.h")
-        gROOT.ProcessLine("setTDRStyle()")
+        if setgStyle:
+            gROOT.ProcessLine("setTDRStyle()")
 
-        gStyle.SetEndErrorSize(2)
-        gStyle.SetPadRightMargin(0.05)
-        gStyle.SetTitleOffset(1.1, "Y")
-        gStyle.SetLabelSize(0.04, "Y")
-        gStyle.SetLabelSize(0.04, "Z")
-        gStyle.SetNdivisions(505, "XY")
 
-        gStyle.SetPalette(55)  # rainbow color map
-        gStyle.SetNumberContours(100)
+            gStyle.SetEndErrorSize(2)
+            gStyle.SetPadRightMargin(0.05)
+            gStyle.SetTitleOffset(1.1, "Y")
+            gStyle.SetLabelSize(0.04, "Y")
+            gStyle.SetLabelSize(0.04, "Z")
+            gStyle.SetNdivisions(505, "XY")
 
-        gStyle.SetOptStat(111110)
-        gStyle.SetStatX(0.94)
-        gStyle.SetStatY(0.93)
-        gStyle.SetStatH(0.30)
-        gStyle.SetStatW(0.28)
+            gStyle.SetPalette(55)  # rainbow color map
+            gStyle.SetNumberContours(100)
 
-        TH1.SetDefaultSumw2()
+            gStyle.SetOptStat(111110)
+            gStyle.SetStatX(0.94)
+            gStyle.SetStatY(0.93)
+            gStyle.SetStatH(0.30)
+            gStyle.SetStatW(0.28)
+
+            TH1.SetDefaultSumw2()
 
 # ______________________________________________________________________________
 # Globals

@@ -44,15 +44,13 @@ def parse_drawer_options(options):
 
     # Trigger tower parameter space
     if options.tower != 99:
-        ieta = options.tower/8
+        # ieta = options.tower/8
         iphi = options.tower%8
-        options.etamin = -2.2 + (4.4/6) * ieta
-        options.etamax = -2.2 + (4.4/6) * (ieta+1)
-        if iphi < 6:
-            options.phimin = -pi/2 + (2*pi/8) * iphi
-            options.phimax = -pi/2 + (2*pi/8) * (iphi+1)
-        else:
-            options.phimin = -2*pi -pi/2 + (2*pi/8) * iphi
-            options.phimax = -2*pi -pi/2 + (2*pi/8) * (iphi+1)
-        options.ptmin = 2.
+        options.etamin = -2.4 #+ (4.4/6) * ieta
+        options.etamax = 2.4 #+ (4.4/6) * (ieta+1)
+
+        options.phimin = (2*pi/8) * iphi - 0.25
+        options.phimax = (2*pi/8) * (iphi+1) + 0.25
+
+        options.ptmin = 0.5
         options.ptmax = 2000.

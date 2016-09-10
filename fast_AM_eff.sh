@@ -1,12 +1,12 @@
 cd ..
 #first argument strip configuration eg: sf1_nz4_L5x2
 SSConfig=$1
-evtype="TTbar"
+evtype="SingleMuonTest"
 # evtype=$2
 EventType="${evtype}_"
-NPU="140"
-PU="PU140"
-NTotEv=2000
+NPU="0"
+PU="PU${NPU}"
+NTotEv=100000
 
 echo "Input Parameters:"
 echo "SSConfig: $SSConfig - EventType: $EventType - PU: $NPU - NTotEv: $NTotEv"
@@ -29,7 +29,7 @@ echo $track_file
 echo "Finding roads..."
 echo `date`
 echo
-amsim -R -i SLHCL1TrackTriggerSimulations/Configuration/input/input_$EventType$PU.txt \
+amsim -R -i SLHCL1TrackTriggerSimulations/Configuration/input/input_SingleMuonTest_tt25_large.txt \
 -o $roads_file \
 -b $pattern_file \
 -n $NTotEv --maxMisses 1 -v 2 -s $SSConfig --maxPatterns $NBankPattern &> log/roads_$EventType${PU}_${1}.log
@@ -41,21 +41,36 @@ amsim -T -i $roads_file \
 -o $track_file \
 -v 2 -f LTF &> log/tracks_$EventType${PU}_${1}.log
 
-echo "Running roads analysis..."
-echo `date`
-echo
+echo "Running efficiency analysis:"
 
 cd SLHCL1TrackTriggerSimulations/AMSimulation/res1
 
-drawer_log_file=../../../log/drawer_$EventType${PU}_${SSConfig}.log
+drawer_log_file=../../../log/drawer_$EventType${PU}_${SSConfig}
 
-python drawer_FOM_driver.py --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
---inDir $inDir &> $drawer_log_file
+echo "Blinding PT"
+echo `date`
+echo
+python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
+--inDir $inDir --blind_variable pt &> ${drawer_log_file}_pt.log
 
-NRoads95pc=`more $drawer_log_file | grep SpecialOut | grep 95 | tail -c 6`
-NRoadsMean=`tail --lines=2 $drawer_log_file | grep Mean | tail -c -16`
+echo "Blinding eta*"
+echo `date`
+echo
+python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
+--inDir $inDir --blind_variable eta_star &> ${drawer_log_file}_eta_star.log
+
+echo "Blinding phi*"
+echo `date`
+echo
+python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
+--inDir $inDir --blind_variable phi_star &> ${drawer_log_file}_phi_star.log
+
+echo "Blinding vz"
+echo `date`
+echo
+python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
+--inDir $inDir --blind_variable vz &> ${drawer_log_file}_vz.log
 
 cd ../..
 
-echo -e "$evtype\t$NPU\t$SSConfig\t$NBankPattern\t$NRoadsMean\t$NRoads95pc"
-echo -e "$evtype\t$NPU\t$SSConfig\t$NBankPattern\t$NRoadsMean\t$NRoads95pc" >> AM_Sim_fast_stat.txt
+echo "DONE"
