@@ -6,12 +6,12 @@ evtype="TTbar"
 EventType="${evtype}_"
 NPU="140"
 PU="PU140"
-NTotEv=2000
+NTotEv=5000
 
 echo "Input Parameters:"
 echo "SSConfig: $SSConfig - EventType: $EventType - PU: $NPU - NTotEv: $NTotEv"
 
-SampleSize=68
+SampleSize=200
 
 NBankPattern=`tail --lines=4 log/patternBank_tt25_${SSConfig}_pt3_${SampleSize}M.log | grep 95 | tail -c 23 | cut -c -7`
 echo "Patterns bank found - max patterns: $NBankPattern"
@@ -53,7 +53,7 @@ python drawer_FOM_driver.py --npatterns $NBankPattern --ss $SSConfig --pu $NPU -
 --inDir $inDir &> $drawer_log_file
 
 NRoads95pc=`more $drawer_log_file | grep SpecialOut | grep 95 | tail -c 6`
-NRoadsMean=`tail --lines=2 $drawer_log_file | grep Mean | tail -c -16`
+NRoadsMean=`tail --lines=5 $drawer_log_file | grep Mean | tail -c -16`
 
 cd ../..
 

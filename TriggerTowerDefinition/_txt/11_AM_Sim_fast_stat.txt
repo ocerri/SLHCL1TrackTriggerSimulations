@@ -1,0 +1,2 @@
+#Ev. Type	PU	SSConfig	Bank size 95%	Mean roads	road 95%TTbar  	140	sf1_nz4_L5x2   	1594200	28.78	110TTbar  	140	sf1_nz6_L5x2   	3794100	24.89	96.5TTbar  	140	sf1_nz8_L5x2   	5894800	20.56	82.1TTbar  	140	sf1_nz4_L5x2_L10x2     	1179600	29.42	105TTbar  	140	sf1_nz6_L5x2_L10x2     	2852100	25.99	94.7TTbar  	140	sf1_nz8_L5x2_L10x2     	5014200	22.82	88.5
+

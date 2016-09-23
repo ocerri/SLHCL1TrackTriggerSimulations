@@ -43,12 +43,13 @@ int PatternGenerator::makePatterns(TString src) {
     long int bankSize = 0, bankSizeOld = -100000, nKeptOld = -100000;
     long int nRead = 0, nKept = 0;
 
+    nEvents_ = 200000000; //ATTENZIONE, DANGER< ERROR, DEBUG, TEMPORARY
     for (long long ievt=0; ievt<nEvents_; ++ievt) {
         if (reader.loadTree(ievt) < 0)  break;
         reader.getEntry(ievt);
 
         // Running estimate of coverage
-        if (verbose_>1 && ievt%100000==0) {
+        if (verbose_>1 && ievt%1000000==0) {
             bankSize = patternBank_map_.size();
             coverage = 1.0 - float(bankSize - bankSizeOld) / float(nKept - nKeptOld);
 

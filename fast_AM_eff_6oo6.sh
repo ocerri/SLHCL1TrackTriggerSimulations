@@ -6,7 +6,7 @@ evtype="SingleMuonTest"
 EventType="${evtype}_"
 NPU="0"
 PU="PU${NPU}"
-NTotEv=100000
+NTotEv=200000
 
 echo "Input Parameters:"
 echo "SSConfig: $SSConfig - EventType: $EventType - PU: $NPU - NTotEv: $NTotEv"
@@ -33,7 +33,7 @@ echo $track_file
 # -o $roads_file \
 # -b $pattern_file \
 # -n $NTotEv -v 2 -s $SSConfig --maxPatterns $NBankPattern &> log/roads_$EventType${PU}_${1}_6oo6.log
-
+#
 # echo "Fitting tracks..."
 # echo `date`
 # echo

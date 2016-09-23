@@ -1,0 +1,72 @@
+Number of events: 2.00M
+
+[####################]  100%
+Elapsed time: 13.6971 sec (real time)
+
+Trigger tower definition loaded
+
+
+[####################]  100%
+Elapsed time: 4.33747 sec (real time)
+
+eff5_TT8 = 12604/12672 = 0.994634 +/- 0.000648994
+
+Module 50029 has 6 TT connected:
+8(2) 15(2) 16(1495) 23(1420) 24(3) 31(5)
+Removing from TT8...done
+Removing from TT15...done
+
+Module 50033 has 5 TT connected:
+16(2) 23(2) 24(1445) 31(1385) 39(1)
+Removing from TT39...done
+
+Module 50229 has 6 TT connected:
+8(4) 9(1) 16(1385) 17(1419) 24(3) 25(3)
+Removing from TT9...done
+Removing from TT24...done
+
+Module 50233 has 6 TT connected:
+16(2) 17(3) 24(1422) 25(1375) 32(1) 33(2)
+Removing from TT32...done
+Removing from TT16...done
+
+Module 50429 has 5 TT connected:
+9(3) 10(4) 17(1474) 18(1497) 26(4)
+Removing from TT9...done
+
+Module 50629 has 5 TT connected:
+11(1) 18(1417) 19(1450) 26(1) 27(6)
+Removing from TT11...done
+
+Module 50633 has 6 TT connected:
+18(3) 19(3) 26(1425) 27(1434) 34(5) 35(2)
+Removing from TT35...done
+Removing from TT18...done
+
+Module 50829 has 6 TT connected:
+11(1) 12(2) 19(1305) 20(1178) 27(2) 28(3)
+Removing from TT11...done
+Removing from TT12...done
+
+Module 51229 has 5 TT connected:
+13(1) 14(2) 21(1474) 22(1482) 29(3)
+Removing from TT13...done
+
+Module 51233 has 6 TT connected:
+21(6) 22(3) 29(1452) 30(1417) 37(3) 38(2)
+Removing from TT38...done
+Removing from TT22...done
+
+Module 51429 has 6 TT connected:
+14(1) 15(2) 22(1404) 23(1414) 30(3) 31(3)
+Removing from TT14...done
+Removing from TT15...done
+
+Module 51433 has 5 TT connected:
+22(2) 23(3) 30(1342) 31(1422) 39(5)
+Removing from TT22...done
+
+[####################]  100%
+Elapsed time: 4.1122 sec (real time)
+
+eff5_TT8 = 12604/12672 = 0.994634 +/- 0.000648994

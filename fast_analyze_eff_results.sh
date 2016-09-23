@@ -32,11 +32,11 @@ cd SLHCL1TrackTriggerSimulations/AMSimulation/res1
 
 drawer_log_file=../../../log/drawer_$EventType${PU}_${SSConfig}
 
-echo "Blinding PT"
-echo `date`
-echo
-python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
---inDir $inDir --blind_variable pt #&> ${drawer_log_file}_pt.log
+# echo "Blinding PT"
+# echo `date`
+# echo
+# python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
+# --inDir $inDir --blind_variable pt #&> ${drawer_log_file}_pt.log
 
 echo "Blinding eta*"
 echo `date`
@@ -44,11 +44,11 @@ echo
 python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
 --inDir $inDir --blind_variable eta_star #&> ${drawer_log_file}_eta_star.log
 
-echo "Blinding phi*"
-echo `date`
-echo
-python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
---inDir $inDir --blind_variable phi_star #&> ${drawer_log_file}_phi_star.log
+# echo "Blinding phi*"
+# echo `date`
+# echo
+# python drawer_FOM_driver.py --task 2 --npatterns $NBankPattern --ss $SSConfig --pu $NPU --EventType $EventType \
+# --inDir $inDir --blind_variable phi_star #&> ${drawer_log_file}_phi_star.log
 
 echo "Blinding vz"
 echo `date`

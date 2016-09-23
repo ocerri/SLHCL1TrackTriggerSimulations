@@ -39,7 +39,10 @@ def main(options):
     #
     elif (options.task==2):
         if   (options.pu==0):
-            options.infile = inDir+"tracks_" + options.EventType + "PU0_" + options.ss
+            if options.tower==25:
+                options.infile = inDir+"tracks_" + options.EventType + "PU0_" + options.ss
+            else:
+                options.infile = inDir+"tracks_tt"+str(options.tower)+ "_" + options.EventType + "PU0_" + options.ss
             if options.m6oo6: options.infile += "_6oo6"
             options.infile += ".root"
         # if   (options.pu==0): options.infile = inDir+"SingleMuonTest_PU0_tt27_sf1_nz4_pt3_ml5_20150511/tracks_LTF_SingleMuonTest_PU0_tt27_sf1_nz4_pt3_5oo6_20150511.root"
@@ -125,7 +128,7 @@ def main(options):
         print "Executing: %s" %stringCommand
         subprocess.call(stringCommand, shell=True)
     elif (options.task==2):
-        stringCommand = "python drawer_perf_eff2.py %s %s %d -n %d -b --outdir %s --pu %d --outstring %s --blind_variable %s" % (options.infile,options.ss,options.npatterns,options.nentries,options.outdir,options.pu,options.outstring,options.blind_variable)
+        stringCommand = "python drawer_perf_eff2.py %s %s %d -n %d -b --outdir %s --pu %d --outstring %s --blind_variable %s --tower %d" % (options.infile,options.ss,options.npatterns,options.nentries,options.outdir,options.pu,options.outstring,options.blind_variable,options.tower)
         print "Executing: %s" %stringCommand
         subprocess.call(stringCommand, shell=True)
     elif (options.task==3):
@@ -143,6 +146,7 @@ if __name__ == '__main__':
 #     add_drawer_arguments(parser)
 
     # Add more arguments
+    parser.add_argument("--tower", type=int, default=25, help="trigger tower (default: %(default)s)")
     parser.add_argument("--task", type=int, default=3, help="FOM to produce: analyticEff=1. syntheticEff=2. #combinations=3")
     parser.add_argument("-n", "--nentries", type=int, default=50000, help="number of entries (default: %(default)s)")
     parser.add_argument("--pu", type=int, default=140, help="number of pileup interactions to be processed (PU=1 will process one track/event in a mu+PU sample) (default: %(default)s)")

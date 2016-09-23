@@ -1,0 +1,59 @@
+amsim -C -i Configuration/input/input_SingleMuon_tt25_large.txt -o root://cmseos:1094//store/user/ocerri/CMSTrigger/stubs_cleaner/stubs_tt25_400M.root -v 2 —-tower 25
+
+nohup amsim -C -i SLHCL1TrackTriggerSimulations/Configuration/input/input_SingleMuon_tt25_large.txt -o /uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/stubs_tt26_400M.root -v 2 —-tower 26 &> log/stub_cleaner_tt26_400M.log &
+
+nohup amsim -C -i SLHCL1TrackTriggerSimulations/Configuration/input/input_SingleMuon_tt25_largeS_2.txt -o /uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/stubs_tt25_200M_2.root -v 2 --tower 25 &> log/stub_cleaner_tt25_200M_2.log &
+
+xrdcp root://cmseos.fnal.gov//store/user/ocerri/CMSTrigger/stubs_cleaner/stubs_tt25_200M.root root://cmseos.fnal.gov//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_ntuple/stubs_tt25_200M/stubs_tt25_34M.root
+
+
+amsim -B -i root://cmseos.fnal.gov//store/user/ocerri/CMSTrigger/stubs_cleaner/stubs_tt25_400M.root -o PatternBanks/patternBank_tt25_sf1_nz2_L5x2_pt3_68M.root -v 2 -s sf1_nz2_L5x2 --minPt 3
+
+nohup amsim -B -i root://cmseos.fnal.gov//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_ntuple/stubs_tt25_200M/stubs_tt25_34M.root -o root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz1_pt3_34M.root -v 2 -s sf1_nz1 --minPt 3 &> log/patternBank_tt25_sf1_nz1_pt3_34M.log &
+
+nohup amsim -B -i root://cmseos.fnal.gov//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_ntuple/stubs_tt25_200M/stubs_tt25_34M.root -o root://cmseos:1094//store/user/l1upgrades/PatternBanks/patternBank_tt25_sf1_nz1_pt3_34M.root -v 2 -s sf1_nz1 --minPt 3 &> log/patternBank_tt25_sf1_nz1_pt3_34M.log &
+
+nohup amsim -B -i root://cmseos.fnal.gov//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_ntuple/stubs_tt25_200M/stubs_tt25_34M.root -o root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz1_pt3_34M.root -v 2 -s sf1_nz1 --minPt 3 &> log/patternBank_tt25_sf1_nz1_pt3_34M.log &
+
+
+nohup amsim -B -i root://cmseos.fnal.gov//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_ntuple/stubs_tt25_200M/stubs_tt25_68M.root -o PatternBanks/patternBank_tt25_sf1_nz1_pt3_68M.root -v 2 -s sf1_nz4 —-tower 26 --minPt 3 &> log/patternBank_tt26_sf1_nz1_pt3_34M.log &
+
+
+Pattern Bank attributes:
+amsim -A -i root://cmseos.fnal.gov//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_ntuple/stubs_tt25_200M/stubs_tt25_34M.root -o /uscms/home/ocerri/work/CMStrigger/_root/11_attribs_patternBank_tt25_sf1_nz1_pt3_34M.root -b root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz1_pt3_34M.root -v 2 -s sf1_nz1 --minPt 3 --maxPatterns 59600 &> log/11_attribs_patternBank_tt25_sf1_nz1_pt3_34M.log &
+
+tail --lines=4 SLHCL1TrackTriggerSimulations/log/patternBank_tt25_sf1_nz2_pt3_34M.log | grep 95 | tail -c 23 | cut -c -7
+
+
+
+
+
+
+LANCIATI da src sopra!!
+
+Pattern matching
+// amsim -R -i Configuration/input/input_Neutrino_PU140_20150408.txt -o root://cmseos:1094//store/user/ocerri/CMSTrigger/PatternMatching/roads_Neutrino_PU140_sf1_nz4_L5x2.root -b root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz4_L5x2_pt3_34M.root -v 2 -s sf1_nz4_L5x2 --maxPatterns 1594200 &> log/roads_Neutrino_PU140_sf1_nz4_L5x2.log
+
+// amsim -R -i Configuration/input/input_Neutrino_PU140_20150408.txt -o root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/roads_Neutrino_PU140_sf1_nz4_L5x2.root -b root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz4_L5x2_pt3_34M.root -v 2 -s sf1_nz4_L5x2 --maxPatterns 1594200 &> log/roads_Neutrino_PU140_sf1_nz4_L5x2.log
+
+amsim -R -i SLHCL1TrackTriggerSimulations/Configuration/input/input_Neutrino_PU140_20150408.txt -o root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/roads_Neutrino_PU140_sf1_nz4_L5x2.root -b root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz4_L5x2_pt3_34M.root -n 1000 --maxMisses 1 -v 2 -s sf1_nz4_L5x2 --maxPatterns 1594200 &> log/roads_Neutrino_PU140_sf1_nz4_L5x2.log &
+
+amsim -R -i SLHCL1TrackTriggerSimulations/Configuration/input/input_TTbar_PU140.txt -o root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/roads_TTbar_PU140_sf1_nz4_L5x2.root -b root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz4_L5x2_pt3_34M.root -n 1000 --maxMisses 1 -v 2 -s sf1_nz4_L5x2 --maxPatterns 1594200 &> log/roads_TTbar_PU140_sf1_nz4_L5x2.log &
+
+amsim -R -i SLHCL1TrackTriggerSimulations/Configuration/input/input_TTbar_PU140.txt -o root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/roads_TTbar_PU140_sf1_nz6_L5x2.root -b root://cmseos:1094//store/user/l1upgrades/PatternBanks/Eta6_Phi8_vz15/patternBank_tt25_sf1_nz6_L5x2_pt3_34M.root -n 100 --maxMisses 1 -v 2 -s sf1_nz4_L5x2 --maxPatterns 3794100 &> log/roads_TTbar_PU140_sf1_nz6_L5x2.log &
+
+
+
+Track fitting
+//amsim -T -i root://cmseos:1094//store/user/ocerri/CMSTrigger/PatternMatching/roads_Neutrino_PU140_sf1_nz4_L5x2.root -o root://cmseos:1094//store/user/ocerri/CMSTrigger/PatternMatching/tracks_Neutrino_PU140_sf1_nz4_L5x2.root -v 2 -f LTF &> log/tracks_Neutrino_PU140_sf1_nz4_L5x2.log &
+
+amsim -T -i root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/roads_Neutrino_PU140_sf1_nz4_L5x2.root -o root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/tracks_Neutrino_PU140_sf1_nz4_L5x2.root -v 2 -f LTF &> log/tracks_Neutrino_PU140_sf1_nz4_L5x2.log &
+
+amsim -T -i root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/roads_TTbar_PU140_sf1_nz4_L5x2.root -o root://cmseos:1094//store/user/l1upgrades/SLHC/GEN/620_SLHC25p3_results/tt25_test/tracks_TTbar_PU140_sf1_nz4_L5x2.root -v 2 -f LTF &> log/tracks_TTbar_PU140_sf1_nz4_L5x2.log &
+
+
+
+
+LS commands
+
+ls /uscms/home/sergo/nobackup/l1upgrades/SLHC/GEN/810_pre11_GENSIM/SingleMuon_Full/SingleMuon/CRAB3/*/*/ntuple*.root >> input_SingleMuon_all_tilted.txt

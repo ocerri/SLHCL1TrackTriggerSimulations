@@ -1,0 +1,4 @@
+/uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/stubs_tt25_68M.root
+/uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/stubs_tt25_68M_2.root
+/uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/stubs_tt25_69M.root
+/uscms/home/ocerri/nobackup/CMSTrigger/CMSSW_6_2_0_SLHC25_patch3/src/SingleMuonStubsSample/stubs_tt25_69M_2.root

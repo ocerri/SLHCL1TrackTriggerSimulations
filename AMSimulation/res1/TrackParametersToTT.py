@@ -54,7 +54,7 @@ def TrackParametersToTT_full(phi, invPT, eta, vz):
     eta_star = OCEtaToEta_star(eta,vz,invPT)
 
     rho = alpha_CMS/invPT
-    if fabs(rho)<OCR_star_phi/2: return -1    
+    if fabs(rho)<OCR_star_phi/2: return -1
     phi_star = OCPhiToPhi_star(phi,invPT)
 
     while phi_star>2*pigreco:

@@ -1,0 +1,57 @@
+TT21 --- Number of particles: 18248
+phi* mean: 2.55676
+eta* mean: -0.379452
+
+
+TT22 --- Number of particles: 18071
+phi* mean: -2.55429
+eta* mean: -0.377319
+
+
+TT23 --- Number of particles: 21849
+phi* mean: -1.95959
+eta* mean: -0.376211
+
+
+TT24 --- Number of particles: 23158
+phi* mean: -1.18208
+eta* mean: 0.333047
+
+
+TT25 --- Number of particles: 22945
+phi* mean: -0.377468
+eta* mean: 0.334605
+
+TT26 --- Number of particles: 22764
+phi* mean: 0.374099
+eta* mean: 0.332734
+
+
+TT27 --- Number of particles: 23509
+phi* mean: 1.18002
+eta* mean: 0.332655
+
+
+TT28 --- Number of particles: 23422
+phi* mean: 1.96359
+eta* mean: 0.331339
+
+
+TT29 --- Number of particles: 19706
+phi* mean: 2.5608
+eta* mean: 0.334644
+
+
+TT30 --- Number of particles: 19449
+phi* mean: -2.56104
+eta* mean: 0.333691
+
+
+TT31 --- Number of particles: 23504
+phi* mean: -1.95957
+eta* mean: 0.33307
+
+
+TT32 --- Number of particles: 6969
+phi* mean: -1.17817
+eta* mean: 0.818018

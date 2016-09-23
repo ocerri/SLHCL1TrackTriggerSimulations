@@ -108,8 +108,9 @@ int StubCleaner::cleanStubs(TString src, TString out) {
         float vz     = reader.vp_vz    ->front();
         int   charge = reader.vp_charge->front();
 
+        // if tower>=48 no shrinking is applyed
         int aux_TT = OCTrackParametersToTT(phi, charge/pt , eta, vz);
-        if (aux_TT != (int)po_.tower) continue;
+        if (aux_TT<48 && aux_TT != (int)po_.tower) continue;
 
         const unsigned nstubs = reader.vb_modId->size();
         if (verbose_>1 && ievt%50000==0)  std::cout << Debug() << Form("... Processing event: %7lld, keeping: %7ld", ievt, nKept) << std::endl;

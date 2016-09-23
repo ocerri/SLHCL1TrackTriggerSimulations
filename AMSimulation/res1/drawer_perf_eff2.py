@@ -361,54 +361,54 @@ def drawer_draw(histos, options):
 
                 h.additional += [h.GetCopyPassedHisto(), h.GetCopyTotalHisto()]
 
-            elif h.ClassName() == "TH1F":
-                ymax = h.GetMaximum() * 1.4
-                h.SetMinimum(0); h.SetMaximum(ymax)
-
-                h.Draw("hist")
-                displayGaus(h, ignorebins=10)
-
-            elif h.ClassName() == "TH2F":
-                ymax = 0.05
-                nbinsx = h.GetNbinsX()
-                gr1 = TGraphAsymmErrors(nbinsx)
-                gr1.SetName(hname + "_gr1"); setattr(h, "gr1", gr1)
-                gr1.SetMarkerSize(1); gr1.SetMarkerColor(col_res)
-                gr2 = TGraphAsymmErrors(nbinsx)
-                gr2.SetName(hname + "_gr2"); setattr(h, "gr2", gr2)
-                gr2.SetMarkerSize(1); gr2.SetMarkerColor(col_res)
-
-                for ibin in xrange(nbinsx):
-                    hpy = h.ProjectionY(hname + "_py%i" % ibin, ibin+1, ibin+1); setattr(h, "py%i" % ibin, hpy)
-                    x = h.GetXaxis().GetBinCenter(ibin+1)
-
-                    if hpy.GetEntries() < 30:
-                        print "WARNING: not enough entries in %s: %i" % (hpy.GetName(), hpy.GetEntries())
-                        gr1.SetPoint(ibin, x, 999999)
-                        gr2.SetPoint(ibin, x, 999999)
-                        continue
-
-                    if hpy.GetEntries() < 100:
-                        print "INFO: rebinning in %s: %i" % (hpy.GetName(), hpy.GetEntries())
-                        hpy.Rebin(2)
-
-                    assert(hpy.GetNbinsX() > 20)
-                    fitxmin, fitxmax = hpy.GetBinCenter(10+1), hpy.GetBinCenter(hpy.GetNbinsX()-1-10+1)
-                    r = hpy.Fit("gaus", "INS", "", fitxmin, fitxmax)
-                    p1, e1, p2, e2 = r.Parameter(1), r.ParError(1), r.Parameter(2), r.ParError(2)
-                    gr1.SetPoint(ibin, x, p1)
-                    gr1.SetPointError(ibin, 0, 0, e1, e1)
-                    gr2.SetPoint(ibin, x, p2)
-                    gr2.SetPointError(ibin, 0, 0, e2, e2)
-
-                hpx2 = h.ProjectionX(hname + "_px2"); hpx2.Reset(); setattr(h, "px2", hpx2)
-                hpx2.SetYTitle("p_{T} resolution/p_{T}")
-                hpx2.SetMinimum(0); hpx2.SetMaximum(ymax)
-                hpx2.SetStats(0); hpx2.Draw()
-                gr2.Draw("p")
+            # elif h.ClassName() == "TH1F":
+            #     ymax = h.GetMaximum() * 1.4
+            #     h.SetMinimum(0); h.SetMaximum(ymax)
+            #
+            #     h.Draw("hist")
+            #     displayGaus(h, ignorebins=10)
+            #
+            # elif h.ClassName() == "TH2F":
+            #     ymax = 0.05
+            #     nbinsx = h.GetNbinsX()
+            #     gr1 = TGraphAsymmErrors(nbinsx)
+            #     gr1.SetName(hname + "_gr1"); setattr(h, "gr1", gr1)
+            #     gr1.SetMarkerSize(1); gr1.SetMarkerColor(col_res)
+            #     gr2 = TGraphAsymmErrors(nbinsx)
+            #     gr2.SetName(hname + "_gr2"); setattr(h, "gr2", gr2)
+            #     gr2.SetMarkerSize(1); gr2.SetMarkerColor(col_res)
+            #
+            #     for ibin in xrange(nbinsx):
+            #         hpy = h.ProjectionY(hname + "_py%i" % ibin, ibin+1, ibin+1); setattr(h, "py%i" % ibin, hpy)
+            #         x = h.GetXaxis().GetBinCenter(ibin+1)
+            #
+            #         if hpy.GetEntries() < 30:
+            #             print "WARNING: not enough entries in %s: %i" % (hpy.GetName(), hpy.GetEntries())
+            #             gr1.SetPoint(ibin, x, 999999)
+            #             gr2.SetPoint(ibin, x, 999999)
+            #             continue
+            #
+            #         if hpy.GetEntries() < 100:
+            #             print "INFO: rebinning in %s: %i" % (hpy.GetName(), hpy.GetEntries())
+            #             hpy.Rebin(2)
+            #
+            #         assert(hpy.GetNbinsX() > 20)
+            #         fitxmin, fitxmax = hpy.GetBinCenter(10+1), hpy.GetBinCenter(hpy.GetNbinsX()-1-10+1)
+            #         r = hpy.Fit("gaus", "INS", "", fitxmin, fitxmax)
+            #         p1, e1, p2, e2 = r.Parameter(1), r.ParError(1), r.Parameter(2), r.ParError(2)
+            #         gr1.SetPoint(ibin, x, p1)
+            #         gr1.SetPointError(ibin, 0, 0, e1, e1)
+            #         gr2.SetPoint(ibin, x, p2)
+            #         gr2.SetPointError(ibin, 0, 0, e2, e2)
+            #
+            #     hpx2 = h.ProjectionX(hname + "_px2"); hpx2.Reset(); setattr(h, "px2", hpx2)
+            #     hpx2.SetYTitle("p_{T} resolution/p_{T}")
+            #     hpx2.SetMinimum(0); hpx2.SetMaximum(ymax)
+            #     hpx2.SetStats(0); hpx2.Draw()
+            #     gr2.Draw("p")
 
             CMS_label()
-            save(options.outdir, "%s_%s" % (hname, options.outstring), dot_root=False, dot_pdf=False, additional=h.additional)
+            save(options.outdir, "%s_%s" % (hname, options.outstring), dot_root=True, dot_pdf=False, additional=h.additional)
     return
 
 
