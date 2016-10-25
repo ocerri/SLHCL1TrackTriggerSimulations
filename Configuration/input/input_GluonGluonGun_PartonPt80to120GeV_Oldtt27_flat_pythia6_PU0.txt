@@ -1,0 +1,10 @@
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_1.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_10.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_2.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_3.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_4.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_5.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_6.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_7.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_8.root
+root://cmseos:1094//store/user/sudha/L1TTAM/ntuples/Pythia6_GluonGun/Pt80-120_0PU/GluonGluonGun_PartonPt80to120GeV_tt27_flat_pythia6_NoPU_ntuple_9.root

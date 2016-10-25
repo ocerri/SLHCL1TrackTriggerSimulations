@@ -43,7 +43,7 @@ int PatternGenerator::makePatterns(TString src) {
     long int bankSize = 0, bankSizeOld = -100000, nKeptOld = -100000;
     long int nRead = 0, nKept = 0;
 
-    nEvents_ = 200000000; //ATTENZIONE, DANGER< ERROR, DEBUG, TEMPORARY
+    // nEvents_ = 200000000; //ATTENtion, DANGER< ERROR, DEBUG, TEMPORARY
     for (long long ievt=0; ievt<nEvents_; ++ievt) {
         if (reader.loadTree(ievt) < 0)  break;
         reader.getEntry(ievt);

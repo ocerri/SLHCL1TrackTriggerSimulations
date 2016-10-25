@@ -1,0 +1,3 @@
+root -l -q /Users/olmo/Dropbox/16_07_FERMILAB_summer_school/CMStrigger/script/CreateModuleList.C++'('$1')'
+source ~/.usefull_alias
+draw_modules /Users/olmo/Dropbox/16_07_FERMILAB_summer_school/CMStrigger/_txt/mod_list_fh_TT$1_ThrHit0.txt
